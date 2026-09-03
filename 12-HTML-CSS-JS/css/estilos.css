@@ -1,0 +1,60 @@
+/* ESTILOS GENERALES */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf6ff;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* CONTENEDOR PRINCIPAL */
+
+.contenedor {
+    width: 90%;
+    max-width: 700px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+/* TARJETA */
+
+.tarjeta {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* TÍTULOS */
+
+h1 {
+    color: #1476b8;
+}
+
+h2 {
+    color: #0b4f7c;
+}
+
+/* DATOS */
+
+.datos {
+    margin: 25px 0;
+    text-align: left;
+}
+
+/* BOTÓN */
+
+button {
+    background-color: #75aadb;
+    color: #082033;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: white;
+    outline: 2px solid #75aadb;
+}
