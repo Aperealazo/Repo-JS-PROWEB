@@ -62,3 +62,7 @@ git push origin main
 ```
 
 > 💡 **Recordá:** cada vez que termines una actividad, realizá un **commit** y subí tu proyecto a GitHub.
+**Problemas??** Si no pudiste subir intenta esto:
+
+git config --global user.name "TúUserdeGithub"
+git config --global user.email "CorreodeGithub"
