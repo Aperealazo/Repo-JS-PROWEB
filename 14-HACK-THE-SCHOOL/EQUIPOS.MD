@@ -8,7 +8,7 @@ Completar los cinco integrantes de cada equipo e indicar el rol de cada uno.
 2. **Dania Chincha** — Responsable de documentación.
 3. **Brisa Janco** — Responsable de pruebas (testing).
 4. **Leonel Álamo** — Programador.
-5. **Martín Quispe** — Colíder.
+5. **Martin Quispe** — Colíder.
 
 ## Sector 03 — Dinamita
 
