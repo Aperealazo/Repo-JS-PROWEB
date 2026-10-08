@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hack The School</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #05080d;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .green {
+            color: #39ff88;
+        }
+
+        .red {
+            color: #ff3766;
+        }
+
+        .blue {
+            color: #43b9ff;
+        }
+
+        .terminal {
+            font-family: "Courier New", monospace;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #253140;
+            padding-bottom: 15px;
+            margin-bottom: 50px;
+        }
+
+        .mission-number {
+            color: #39ff88;
+            font-family: "Courier New", monospace;
+        }
+
+        .timer {
+            font-size: 22px;
+            font-family: "Courier New", monospace;
+        }
+
+        .main-title {
+            text-align: center;
+            font-family: "Courier New", monospace;
+            color: #39ff88;
+            font-size: clamp(40px, 8vw, 80px);
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #b8c2cc;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 420px;
+            margin: 40px auto 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #304457;
+            background: #09111a;
+            color: white;
+            outline: none;
+            border-radius: 6px;
+        }
+
+        input:focus {
+            border-color: #39ff88;
+        }
+
+        .btn {
+            border: none;
+            background: #39ff88;
+            color: #031009;
+            padding: 15px 28px;
+            border-radius: 5px;
+            font-weight: bold;
+            min-width: 180px;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-red {
+            background: #ff3766;
+            color: white;
+        }
+
+        .btn-dark {
+            background: #0b141e;
+            color: white;
+            border: 1px solid #304457;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .card {
+            background: #09111a;
+            border: 1px solid #1c2b3b;
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        .challenge {
+            max-width: 760px;
+            margin: auto;
+        }
+
+        .challenge h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .challenge-description {
+            text-align: center;
+            color: #b5c0cc;
+            margin-bottom: 35px;
+        }
+
+        .hint {
+            border: 1px solid #18334a;
+            background: #09131d;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+
+        .hint small {
+            color: #39ff88;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .progress-wrapper {
+            margin-top: 40px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .progress {
+            height: 10px;
+            background: #162330;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #39ff88;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option {
+            padding: 22px;
+            background: #09131d;
+            border: 1px solid #304457;
+            color: white;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .option:hover {
+            border-color: #39ff88;
+        }
+
+        .option.danger:hover {
+            border-color: #ff3766;
+        }
+
+        .code {
+            background: #050b12;
+            border: 1px solid #1c2b3b;
+            padding: 25px;
+            border-radius: 6px;
+            font-family: "Courier New", monospace;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .answer-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .answer {
+            background: #09131d;
+            border: 1px solid #304457;
+            color: white;
+            padding: 18px;
+            text-align: left;
+            border-radius: 6px;
+        }
+
+        .answer:hover {
+            border-color: #39ff88;
+        }
+
+        .final-timer {
+            text-align: center;
+            font-family: "Courier New", monospace;
+            font-size: clamp(70px, 15vw, 140px);
+            color: #ff3766;
+            margin: 30px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .step {
+            border: 1px solid #304457;
+            background: #09111a;
+            padding: 25px;
+            min-height: 150px;
+            border-radius: 6px;
+        }
+
+        .step-number {
+            color: #39ff88;
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .code-final {
+            font-size: 38px;
+            letter-spacing: 15px;
+            text-align: center;
+            margin: 30px 0;
+            font-family: "Courier New", monospace;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 45px 0;
+        }
+
+        .result-card {
+            background: #09111a;
+            border: 1px solid #304457;
+            padding: 30px 15px;
+            text-align: center;
+            border-radius: 6px;
+        }
+
+        .result-card small {
+            color: #39ff88;
+        }
+
+        .result-card strong {
+            display: block;
+            font-family: "Courier New", monospace;
+            font-size: 36px;
+            margin-top: 12px;
+        }
+
+        .ranking {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        .ranking th,
+        .ranking td {
+            padding: 17px;
+            text-align: left;
+            border-bottom: 1px solid #1c2b3b;
+        }
+
+        .ranking th {
+            color: #8393a3;
+            font-size: 12px;
+        }
+
+        .ranking tr.current {
+            background: rgba(57, 255, 136, 0.12);
+            color: #39ff88;
+        }
+
+        .footer-text {
+            color: #718191;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 13px;
+        }
+
+        .feedback {
+            min-height: 30px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .screen {
+                padding: 20px;
+            }
+
+            .options,
+            .steps,
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                margin-bottom: 30px;
+            }
+
+            .ranking {
+                font-size: 13px;
+            }
+
+            .ranking th,
+            .ranking td {
+                padding: 10px 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================= -->
+    <!-- PANTALLA 1 - INICIO -->
+    <!-- ========================================= -->
+
+    <section id="inicio" class="screen active">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <span class="green terminal">
+                    ● SYSTEM ONLINE
+                </span>
+
+                <span>
+                    PROGRAMACIÓN II × ENGLISH V
+                </span>
+
+            </div>
+
+            <div style="margin-top: 10vh;">
+
+                <div class="center green terminal">
+                    CEN SECURITY SYSTEM // 2026
+                </div>
+
+                <h1 class="main-title">
+                    HACK THE SCHOOL
+                </h1>
+
+                <p class="subtitle">
+                    The school network has been hacked.<br>
+                    You have <strong>5 minutes</strong> to recover the system.
+                </p>
+
+                <div class="input-group">
+
+                    <label>
+                        ENTER AGENT NAME
+                    </label>
+
+                    <input id="nickname" type="text" placeholder="Nickname..." maxlength="15">
+
+                </div>
+
+                <div class="center">
+
+                    <button class="btn" onclick="startGame()">
+                        START MISSION
+                    </button>
+
+                </div>
+
+                <div id="inicioFeedback" class="feedback red"></div>
+
+            </div>
+
+            <div class="footer-text">
+                5 MISSIONS · SCORE · LIVE RANKING
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- MISIÓN 1 -->
+    <!-- ========================================= -->
+
+    <section id="mission1" class="screen">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <span class="mission-number">
+                    MISSION 01 / 05
+                </span>
+
+                <span class="timer">
+                    04:37
+                </span>
+
+            </div>
+
+            <div class="challenge">
+
+                <h2>
+                    🔒 ACCESS DENIED
+                </h2>
+
+                <p class="challenge-description">
+                    Recover the first access key.
+                </p>
+
+                <div class="card">
+
+                    <div class="hint">
+
+                        <small>
+                            PASSWORD HINT
+                        </small>
+
+                        The password is the opposite of
+
+                        <strong class="red">
+                            FALSE
+                        </strong>.
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            ENTER PASSWORD
+                        </label>
+
+                        <input id="passwordMission" type="text" placeholder="Password...">
+
+                    </div>
+
+                    <div class="center">
+
+                        <button class="btn" onclick="checkMission1()">
+                            UNLOCK SYSTEM
+                        </button>
+
+                    </div>
+
+                    <div id="feedback1" class="feedback"></div>
+
+                </div>
+
+                <div class="progress-wrapper">
+
+                    <div class="progress-info">
+                        <span>Mission progress</span>
+                        <span>20%</span>
+                    </div>
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:20%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- MISIÓN 2 -->
+    <!-- ========================================= -->
+
+    <section id="mission2" class="screen">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <span class="mission-number">
+                    MISSION 02 / 05
+                </span>
+
+                <span class="timer">
+                    03:51
+                </span>
+
+            </div>
+
+            <div class="challenge">
+
+                <h2>
+                    FOLLOW THE COMMAND
+                </h2>
+
+                <p class="challenge-description">
+
+                    Click
+
+                    <strong class="green">
+                        ENABLE
+                    </strong>.
+
+                    <br>
+
+                    Do not press
+
+                    <strong class="red">
+                        EXIT
+                    </strong>.
+
+                </p>
+
+                <div class="options">
+
+                    <button class="option" onclick="wrongAnswer('feedback2')">
+                        DELETE
+                    </button>
+
+                    <button class="option danger" onclick="wrongAnswer('feedback2')">
+                        EXIT
+                    </button>
+
+                    <button class="option" onclick="correctMission2()">
+                        ENABLE
+                    </button>
+
+                    <button class="option" onclick="wrongAnswer('feedback2')">
+                        RESTART
+                    </button>
+
+                </div>
+
+                <div id="feedback2" class="feedback"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- MISIÓN 3 -->
+    <!-- ========================================= -->
+
+    <section id="mission3" class="screen">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <span class="mission-number">
+                    MISSION 03 / 05
+                </span>
+
+                <span class="timer">
+                    02:58
+                </span>
+
+            </div>
+
+            <div class="challenge">
+
+                <h2 class="red">
+                    ERROR DETECTED
+                </h2>
+
+                <p class="challenge-description">
+                    Find the problem.
+                </p>
+
+                <div class="code">
+
+                    <span class="blue">
+                        server.js
+                    </span>
+
+                    <br><br>
+
+                    let user = "Alex";<br>
+
+                    console.log(
+                    <span class="red">
+                        userName
+                    </span>
+                    );
+
+                    <br><br>
+
+                    <span class="red">
+                        ERROR: Cannot find variable 'userName'
+                    </span>
+
+                </div>
+
+                <h3 style="margin-bottom:20px;">
+                    What does the error mean?
+                </h3>
+
+                <div class="answer-list">
+
+                    <button class="answer" onclick="wrongAnswer('feedback3')">
+                        A. The server is offline.
+                    </button>
+
+                    <button class="answer" onclick="correctMission3()">
+                        B. The variable does not exist or its name is incorrect.
+                    </button>
+
+                    <button class="answer" onclick="wrongAnswer('feedback3')">
+                        C. The password is incorrect.
+                    </button>
+
+                </div>
+
+                <div id="feedback3" class="feedback"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- MISIÓN 4 -->
+    <!-- ========================================= -->
+
+    <section id="mission4" class="screen">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <span class="mission-number">
+                    MISSION 04 / 05
+                </span>
+
+                <span class="timer">
+                    02:10
+                </span>
+
+            </div>
+
+            <div class="challenge">
+
+                <h2>
+                    FIX THE CODE
+                </h2>
+
+                <p class="challenge-description">
+                    Select the correct code.
+                </p>
+
+                <div class="code">
+
+                    function login(user, pass) {
+
+                    <br><br>
+
+                    &nbsp;&nbsp;if (
+                    user === "admin" &&
+                    pass === "1234"
+                    ) {
+
+                    <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;return true;
+
+                    <br>
+
+                    &nbsp;&nbsp;}
+
+                    <br><br>
+
+                    &nbsp;&nbsp;__________
+
+                    <br><br>
+
+                    }
+
+                </div>
+
+                <div class="answer-list">
+
+                    <button class="answer" onclick="wrongAnswer('feedback4')">
+                        A. return 0;
+                    </button>
+
+                    <button class="answer" onclick="correctMission4()">
+                        B. return false;
+                    </button>
+
+                    <button class="answer" onclick="wrongAnswer('feedback4')">
+                        C. return null;
+                    </button>
+
+                </div>
+
+                <div id="feedback4" class="feedback"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- MISIÓN FINAL -->
+    <!-- ========================================= -->
+
+    <section id="mission5" class="screen">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <span class="red terminal">
+                    FINAL MISSION
+                </span>
+
+                <span class="timer red">
+                    00:59
+                </span>
+
+            </div>
+
+            <div class="challenge">
+
+                <h2 class="red">
+                    CRITICAL SYSTEM FAILURE
+                </h2>
+
+                <p class="challenge-description">
+                    Complete the sequence before system shutdown.
+                </p>
+
+                <div class="steps">
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            01
+                        </div>
+
+                        Enter the correct code.
+
+                    </div>
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            02
+                        </div>
+
+                        Disable the alarm.
+
+                    </div>
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            03
+                        </div>
+
+                        Press CONFIRM.
+
+                    </div>
+
+                </div>
+
+                <div class="code-final">
+                    7 2 _ _
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        ENTER FINAL CODE
+                    </label>
+
+                    <input id="finalCode" type="text" placeholder="Code...">
+
+                </div>
+
+                <div class="center">
+
+                    <button class="btn btn-red" onclick="checkFinalMission()">
+                        CONFIRM
+                    </button>
+
+                </div>
+
+                <div id="feedback5" class="feedback"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- RESULTADO -->
+    <!-- ========================================= -->
+
+    <section id="result" class="screen">
+
+        <div class="container">
+
+            <div class="center">
+
+                <div class="green terminal">
+
+                    ✓ SYSTEM RECOVERED
+
+                </div>
+
+                <h1 class="main-title" style="font-size:55px;margin-top:20px;">
+
+                    MISSION COMPLETED
+
+                </h1>
+
+                <p class="subtitle">
+
+                    Agent
+
+                    <strong id="resultName" class="green">
+                        PLAYER
+                    </strong>
+
+                    successfully restored the network.
+
+                </p>
+
+            </div>
+
+
+            <div class="result-grid">
+
+                <div class="result-card">
+
+                    <small>
+                        SCORE
+                    </small>
+
+                    <strong>
+                        8,750
+                    </strong>
+
+                </div>
+
+
+                <div class="result-card">
+
+                    <small>
+                        TIME
+                    </small>
+
+                    <strong>
+                        03:42
+                    </strong>
+
+                </div>
+
+
+                <div class="result-card">
+
+                    <small>
+                        RANK
+                    </small>
+
+                    <strong class="green">
+                        #3
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="center">
+
+                <button class="btn" onclick="showScreen('ranking')">
+
+                    VIEW RANKING
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- RANKING -->
+    <!-- ========================================= -->
+
+    <section id="ranking" class="screen">
+
+        <div class="container">
+
+            <div class="center">
+
+                <div class="green terminal">
+                    LIVE RESULTS
+                </div>
+
+                <h1 style="font-size:50px;margin-top:10px;">
+                    TOP AGENTS
+                </h1>
+
+                <p class="subtitle">
+                    Today's best Hack The School players
+                </p>
+
+            </div>
+
+
+            <table class="ranking">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>AGENT</th>
+                        <th>SCORE</th>
+                        <th>TIME</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>🥇 01</td>
+                        <td>SOFI</td>
+                        <td>12,450</td>
+                        <td>02:47</td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>🥈 02</td>
+                        <td>MATEO</td>
+                        <td>11,920</td>
+                        <td>03:01</td>
+
+                    </tr>
+
+
+                    <tr class="current">
+
+                        <td>🥉 03</td>
+                        <td id="rankingName">PLAYER</td>
+                        <td>8,750</td>
+                        <td>03:42</td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>04</td>
+                        <td>CAMI</td>
+                        <td>8,210</td>
+                        <td>03:55</td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>05</td>
+                        <td>THIAGO</td>
+                        <td>7,980</td>
+                        <td>04:10</td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <div class="footer-text green">
+
+                NEXT PLAYER READY // BEAT THE RECORD: 02:47
+
+            </div>
+
+
+            <div class="center" style="margin-top:30px;">
+
+                <button class="btn" onclick="restartGame()">
+
+                    NEW PLAYER
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script>
+
+        let playerName = "PLAYER";
+
+
+        // =========================================
+        // CAMBIAR DE PANTALLA
+        // =========================================
+
+        function showScreen(id) {
+
+            const screens =
+                document.querySelectorAll(".screen");
+
+
+            screens.forEach(function (screen) {
+
+                screen.classList.remove("active");
+
+            });
+
+
+            document
+                .getElementById(id)
+                .classList.add("active");
+
+        }
+
+
+
+        // =========================================
+        // INICIAR JUEGO
+        // =========================================
+
+        function startGame() {
+
+            const nickname =
+                document
+                    .getElementById("nickname")
+                    .value
+                    .trim();
+
+
+            if (nickname === "") {
+
+                document.getElementById(
+                    "inicioFeedback"
+                ).textContent =
+                    "Enter an agent name.";
+
+                return;
+
+            }
+
+
+            playerName =
+                nickname.toUpperCase();
+
+
+            document.getElementById(
+                "resultName"
+            ).textContent =
+                playerName;
+
+
+            document.getElementById(
+                "rankingName"
+            ).textContent =
+                playerName;
+
+
+            showScreen("mission1");
+
+        }
+
+
+
+        // =========================================
+        // MISIÓN 1
+        // =========================================
+
+        function checkMission1() {
+
+            const password =
+                document
+                    .getElementById(
+                        "passwordMission"
+                    )
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (password === "true") {
+
+                document.getElementById(
+                    "feedback1"
+                ).innerHTML =
+                    "<span class='green'>ACCESS GRANTED</span>";
+
+
+                setTimeout(function () {
+
+                    showScreen("mission2");
+
+                }, 800);
+
+            }
+
+            else {
+
+                document.getElementById(
+                    "feedback1"
+                ).innerHTML =
+                    "<span class='red'>ACCESS DENIED — TRY AGAIN</span>";
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // RESPUESTA INCORRECTA
+        // =========================================
+
+        function wrongAnswer(id) {
+
+            document
+                .getElementById(id)
+                .innerHTML =
+                "<span class='red'>INCORRECT — TRY AGAIN</span>";
+
+        }
+
+
+
+        // =========================================
+        // MISIÓN 2
+        // =========================================
+
+        function correctMission2() {
+
+            document.getElementById(
+                "feedback2"
+            ).innerHTML =
+                "<span class='green'>COMMAND COMPLETED</span>";
+
+
+            setTimeout(function () {
+
+                showScreen("mission3");
+
+            }, 700);
+
+        }
+
+
+
+        // =========================================
+        // MISIÓN 3
+        // =========================================
+
+        function correctMission3() {
+
+            document.getElementById(
+                "feedback3"
+            ).innerHTML =
+                "<span class='green'>ERROR IDENTIFIED</span>";
+
+
+            setTimeout(function () {
+
+                showScreen("mission4");
+
+            }, 700);
+
+        }
+
+
+
+        // =========================================
+        // MISIÓN 4
+        // =========================================
+
+        function correctMission4() {
+
+            document.getElementById(
+                "feedback4"
+            ).innerHTML =
+                "<span class='green'>CODE FIXED</span>";
+
+
+            setTimeout(function () {
+
+                showScreen("mission5");
+
+            }, 700);
+
+        }
+
+
+
+        // =========================================
+        // MISIÓN FINAL
+        // =========================================
+
+        function checkFinalMission() {
+
+            const code =
+                document
+                    .getElementById("finalCode")
+                    .value
+                    .trim();
+
+
+            // Por ahora está hardcodeado
+            // La clave final es 7294.
+
+            if (code === "7294") {
+
+                document.getElementById(
+                    "feedback5"
+                ).innerHTML =
+                    "<span class='green'>SYSTEM RECOVERED</span>";
+
+
+                setTimeout(function () {
+
+                    showScreen("result");
+
+                }, 1000);
+
+            }
+
+            else {
+
+                document.getElementById(
+                    "feedback5"
+                ).innerHTML =
+                    "<span class='red'>INVALID CODE</span>";
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // REINICIAR
+        // =========================================
+
+        function restartGame() {
+
+            document.getElementById(
+                "nickname"
+            ).value = "";
+
+
+            document.getElementById(
+                "passwordMission"
+            ).value = "";
+
+
+            document.getElementById(
+                "finalCode"
+            ).value = "";
+
+
+            document
+                .querySelectorAll(".feedback")
+                .forEach(function (element) {
+
+                    element.innerHTML = "";
+
+                });
+
+
+            showScreen("inicio");
+
+        }
+
+    </script>
+
+</body>
+
+</html>
